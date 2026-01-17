@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PugHaven - Pug Gaming & Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login/Signup Screen -->
+    <div id="auth-screen" class="screen active">
+        <div class="auth-container">
+            <h1>🐶 Welcome to PugHaven! 🐶</h1>
+            <div id="login-form" class="form-container">
+                <h2>Login</h2>
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                <button onclick="login()">Login</button>
+                <p>Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+            </div>
+            <div id="signup-form" class="form-container hidden">
+                <h2>Sign Up</h2>
+                <input type="text" id="signup-username" placeholder="Username">
+                <input type="password" id="signup-password" placeholder="Password">
+                <input type="password" id="signup-confirm" placeholder="Confirm Password">
+                <button onclick="signup()">Create Account</button>
+                <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Site -->
+    <div id="main-screen" class="screen">
+        <header>
+            <div class="header-content">
+                <h1>🐶 PugHaven</h1>
+                <div class="user-info">
+                    <span id="username-display"></span>
+                    <span id="skittles-display">🌈 Skittles: <span id="skittles-count">0</span></span>
+                    <button onclick="logout()">Logout</button>
+                </div>
+            </div>
+            <nav>
+                <button onclick="showTab('games')">Games</button>
+                <button onclick="showTab('chat')">Chat</button>
+                <button onclick="showTab('shop')">Shop</button>
+                <button onclick="showTab('inventory')">My Items</button>
+                <button onclick="showModMenu()">Moderator</button>
+            </nav>
+        </header>
+
+        <main id="main-content">
+            <!-- Games Tab -->
+            <div id="games-tab" class="tab-content">
+                <h2>Pug Games</h2>
+                <div class="games-grid">
+                    <div class="game-card" onclick="playGame('pug-catch')">
+                        <h3>🐕 Pug Catch</h3>
+                        <p>Catch falling treats! Earn Skittles!</p>
+                        <button>Play</button>
+                    </div>
+                    <div class="game-card" onclick="playGame('pug-run')">
+                        <h3>🏃 Pug Run</h3>
+                        <p>Help the pug avoid obstacles!</p>
+                        <button>Play</button>
+                    </div>
+                    <div class="game-card" onclick="playGame('pug-memory')">
+                        <h3>🧠 Pug Memory</h3>
+                        <p>Match the pug cards!</p>
+                        <button>Play</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Tab -->
+            <div id="chat-tab" class="tab-content">
+                <h2>Live Chat</h2>
+                <div class="chat-container">
+                    <div class="online-users">
+                        <h3>Online Users 🟢</h3>
+                        <div id="online-list"></div>
+                    </div>
+                    <div class="chat-main">
+                        <div id="chat-messages"></div>
+                        <div class="chat-input-container">
+                            <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+                            <button onclick="sendMessage()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shop Tab -->
+            <div id="shop-tab" class="tab-content">
+                <h2>Skittles Shop 🌈</h2>
+                <div id="shop-items" class="shop-grid"></div>
+            </div>
+
+            <!-- Inventory Tab -->
+            <div id="inventory-tab" class="tab-content">
+                <h2>My Items</h2>
+                <div id="inventory-items" class="inventory-grid"></div>
+                <p id="no-items-msg" class="hidden">You don't have any items yet. Visit the shop!</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Moderator Menu Modal -->
+    <div id="mod-menu-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModMenu()">&times;</span>
+            <div id="mod-password-prompt">
+                <h2>Moderator Access</h2>
+                <p>Select moderator level:</p>
+                <button onclick="promptModPassword('admin')">Admin Moderator</button>
+                <button onclick="promptModPassword('chat')">Chat Moderator</button>
+            </div>
+            <div id="mod-password-input" class="hidden">
+                <h3 id="mod-level-title"></h3>
+                <input type="password" id="mod-password" placeholder="Enter password">
+                <button onclick="verifyModPassword()">Submit</button>
+                <button onclick="cancelModPassword()">Cancel</button>
+            </div>
+            <div id="admin-mod-panel" class="hidden">
+                <h2>Admin Moderator Panel</h2>
+                <div class="mod-section">
+                    <h3>Skittles Management</h3>
+                    <button onclick="rainSkittles()">🌈 Rain Skittles (100 to everyone online!)</button>
+                    <button onclick="giveEveryoneSkittles()">💰 Give Everyone 500 Skittles</button>
+                    <div class="mod-input-group">
+                        <input type="number" id="self-skittles" placeholder="Amount">
+                        <button onclick="giveSelfSkittles()">Give Myself Skittles</button>
+                    </div>
+                    <div class="mod-input-group">
+                        <input type="text" id="gift-username" placeholder="Username">
+                        <input type="number" id="gift-amount" placeholder="Amount">
+                        <button onclick="giftSkittles()">Gift Skittles</button>
+                    </div>
+                </div>
+            </div>
+            <div id="chat-mod-panel" class="hidden">
+                <h2>Chat Moderator Panel</h2>
+                <p>Daily Pay: 100 Skittles 💰</p>
+                <div class="mod-section">
+                    <h3>Word Filter</h3>
+                    <div class="mod-input-group">
+                        <input type="text" id="ban-word" placeholder="Word to ban">
+                        <button onclick="banWord()">Ban Word</button>
+                    </div>
+                    <div id="banned-words-list">
+                        <h4>Banned Words:</h4>
+                        <div id="banned-words"></div>
+                    </div>
+                </div>
+                <div class="mod-section">
+                    <h3>Announcements</h3>
+                    <textarea id="announcement-text" placeholder="Enter announcement message"></textarea>
+                    <button onclick="makeAnnouncement()">Post Announcement</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Canvas Modal -->
+    <div id="game-modal" class="modal">
+        <div class="modal-content game-content">
+            <span class="close" onclick="closeGame()">&times;</span>
+            <div id="game-container"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="chat.js"></script>
+    <script src="shop.js"></script>
+    <script src="moderator.js"></script>
+    <script src="games.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
