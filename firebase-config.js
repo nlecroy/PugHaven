@@ -1,13 +1,13 @@
 // Firebase Configuration
-// Replace these values with your actual Firebase project configuration
+// PugHaven Firebase Project
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyD0DtC9N_q3jZL-xEuzhn6QSXvgTjkzOGE",
+    authDomain: "pughaven-dec6a.firebaseapp.com",
+    databaseURL: "https://pughaven-dec6a-default-rtdb.firebaseio.com",
+    projectId: "pughaven-dec6a",
+    storageBucket: "pughaven-dec6a.firebasestorage.app",
+    messagingSenderId: "80883268365",
+    appId: "1:80883268365:web:18e3fd790a0cdd2bd48e44"
 };
 
 // Initialize Firebase
